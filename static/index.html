@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spam Detection</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 40px;
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 1px 2px 8px #4f4f4f55;
+            font-size: 2.5rem;
+        }
+        #emailText {
+            width: 350px;
+            height: 180px;
+            border-radius: 15px;
+            border: none;
+            padding: 16px;
+            font-size: 1.1rem;
+            background: #ffffffcc;
+            box-shadow: 0 2px 16px #0002;
+            margin-top: 20px;
+            resize: vertical;
+            transition: box-shadow 0.2s;
+        }
+        #emailText:focus {
+            outline: none;
+            box-shadow: 0 4px 24px #0077ff44;
+        }
+        button {
+            margin-top: 24px;
+            padding: 12px 32px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(90deg, #ff5858 0%, #f09819 100%);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #ff585822;
+            letter-spacing: 1px;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #f09819 0%, #ff5858 100%);
+            box-shadow: 0 4px 16px #ff585844;
+        }
+        #result {
+            margin-top: 32px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #222;
+            min-height: 32px;
+            padding: 10px 32px;
+            border-radius: 12px;
+            background: #fff9;
+            box-shadow: 0 2px 8px #0001;
+            display: inline-block;
+        }
+        @media (max-width: 500px) {
+            #emailText {
+                width: 95vw;
+                min-width: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Spam Detection</h1>
+    <textarea id="emailText" placeholder="Type your email here..."></textarea>
+    <br>
+    <button onclick="checkSpam()">Check if Spam</button>
+    <p id="result"></p>
+
+    <script>
+        async function checkSpam() {
+            const emailText = document.getElementById('emailText').value;
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email_text: emailText })
+            });
+            const data = await response.json();
+            document.getElementById('result').innerText = "Prediction: " + data.result;
+        }
+    </script>
+</body>
+</html>
